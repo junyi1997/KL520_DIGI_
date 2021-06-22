@@ -73,10 +73,11 @@ def draw_result(dev_idx, det_res, captured_frames):
             elif (class_num==1):
                 captured_frames[0] = cv2.rectangle(captured_frames[0], (x1, y1), (x2, y2), (255, 0, 0), 3)   
                 #print("score of fd: ", score)
-    #fps = capture.get(cv2.CAP_PROP_FPS)
+    # fps = capture.get(cv2.CAP_PROP_FPS)
 
     # print("FPS : {0}".format(fps))
     print("FPS : {:.2f}".format(1/(time.time()-count)))
+    # print(det_res)
     count = time.time()
     cv2.imshow('detection', captured_frames[0])
     del captured_frames[0]

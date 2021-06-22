@@ -6,7 +6,8 @@ from common import constants
 
 import cv2
 import sys
-
+import time
+count = 0
 
 def overlap(x1_1,y1_1,x2_1,y2_1, x1_2,y1_2,x2_2,y2_2):
     #check if there is any overlap
@@ -45,6 +46,7 @@ def overlap(x1_1,y1_1,x2_1,y2_1, x1_2,y1_2,x2_2,y2_2):
     return o_l
 
 def draw_result(dev_idx, det_res, captured_frames):
+    global count
     x1_0 = 0
     y1_0 = 0
     x2_0 = 0
@@ -72,7 +74,9 @@ def draw_result(dev_idx, det_res, captured_frames):
             elif (class_num==1):
                 captured_frames[0] = cv2.rectangle(captured_frames[0], (x1, y1), (x2, y2), (255, 0, 0), 3)   
                 #print("score of fd: ", score)
-
+    print("FPS : {:.2f}".format(1/(time.time()-count)))
+    # print(det_res)
+    count = time.time()
     cv2.imshow('detection', captured_frames[0])
     del captured_frames[0]
     key = cv2.waitKey(1)
@@ -91,9 +95,9 @@ def user_test_single_dme(dev_idx, loop):
     is_raw_ouput  = False
     kdp_wrapper.kdp_dme_load_ssd_model(dev_idx, model_path, is_raw_ouput)
 
-    image_source_h = 480
-    image_source_w = 640
-    image_size = image_source_w * image_source_h * 2
+    image_source_h = 100
+    image_source_w = 100
+    image_size = image_source_w * image_source_h 
     frames = []
     app_id = constants.APP_FD_LM
 
