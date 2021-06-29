@@ -91,16 +91,16 @@ def draw_result(dev_idx, det_res, captured_frames):
 
 
 def user_test_single_dme(dev_idx, loop):
-    global capture
+    # global capture
     """Test single dme."""
     # load model into Kneron device
     model_path = "../test_images/dme_ssd_fd"
     is_raw_ouput  = True
 
     kdp_wrapper.kdp_dme_load_ssd_model(dev_idx, model_path, is_raw_ouput)
-    image_source_h = 480
-    image_source_w = 640
-    image_size = image_source_w * image_source_h * 2
+    image_source_h = 240
+    image_source_w = 320    
+    image_size = image_source_w * image_source_h *2
     frames = []
     app_id = 0 # if app_id is 0, output raw data for kdp_wrapper.kdp_dme_inference
 
@@ -118,15 +118,15 @@ def user_test_single_dme(dev_idx, loop):
 
     while (loop):
         raw_res = kdp_wrapper.kdp_dme_inference(dev_idx, app_id, capture, image_size, frames)
-
+        
         det_res = postprocess_(raw_res, anchor_path, model_input_shape,
                             image_source_w, image_source_h, score_thres, only_max, nms_thres)
 
         draw_result(dev_idx, det_res, frames)
         loop -= 1
-
+    
     kdp_wrapper.kdp_exit_dme(dev_idx)
-
+    
 def user_test_cam_dme_post_host_ssd_fd(dev_idx, user_id):
     # dme test
     user_test_single_dme(dev_idx, 1000)

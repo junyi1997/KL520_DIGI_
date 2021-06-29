@@ -27,8 +27,8 @@ TEST_DME_YOLO_224_DIR = "".join([TEST_DIR, "/dme_yolo_224/"])
 DME_YOLO_224_MODEL_FILE = "".join([TEST_DME_YOLO_224_DIR, "all_models.bin"])
 DME_YOLO_224_FW_SETUP = "".join([TEST_DME_YOLO_224_DIR, "fw_info.bin"])
 
-IMG_SOURCE_W = 640
-IMG_SOURCE_H = 480
+IMG_SOURCE_W = 320
+IMG_SOURCE_H = 240
 DME_IMG_SIZE = IMG_SOURCE_W * IMG_SOURCE_H * 2
 DME_MODEL_SIZE = 20 * 1024 * 1024
 DME_FWINFO_SIZE = 512
@@ -316,8 +316,8 @@ def kdp_dme_load_ssd_model(dev_idx, _model_path, is_raw_output):
     # dme configuration
     model_id = 3       # model id when compiling in toolchain
     output_num = 8     # number of output node for the model
-    image_col = 640
-    image_row = 480
+    image_col = 320
+    image_row = 240
     image_ch = 3
     image_format = (constants.IMAGE_FORMAT_SUB128 |
                     constants.NPU_FORMAT_RGB565)
@@ -752,15 +752,18 @@ def isi_capture_frame(cap, frames):
         frames: List of frames for the video capture to add to.
     """
     _cv_ret, frame = cap.read()
+
     if sys.platform == "darwin":
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, IMG_SOURCE_W)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, IMG_SOURCE_H)
     if frame is None:
         print("fail to read from cam!")
     frame = cv2.flip(frame, 1)
+    
     frames.append(frame)
 
     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2BGR565)
+    
     frame_data = frame.reshape(ISI_IMG_SIZE)
     c_char_p = ctypes.POINTER(ctypes.c_char)
     frame_data = frame_data.astype(np.uint8)

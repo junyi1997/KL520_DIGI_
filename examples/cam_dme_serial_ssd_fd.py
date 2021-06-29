@@ -95,9 +95,9 @@ def user_test_single_dme(dev_idx, loop):
     is_raw_ouput  = False
     kdp_wrapper.kdp_dme_load_ssd_model(dev_idx, model_path, is_raw_ouput)
 
-    image_source_h = 100
-    image_source_w = 100
-    image_size = image_source_w * image_source_h 
+    image_source_h = 480
+    image_source_w = 640
+    image_size = image_source_w * image_source_h * 2
     frames = []
     app_id = constants.APP_FD_LM
 
