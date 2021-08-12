@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     print("Task: ", args.task_name)
 
-    print("dev_idx = {:}/tuser_id = {:}".format(dev_idx,user_id))
+    print("dev_idx = {:}\tuser_id = {:}".format(dev_idx,user_id))
     ### parse parameters and run different example ###
     {
         "cam_dme_serial_ssd_fd": user_test_cam_dme_ssd_fd,
