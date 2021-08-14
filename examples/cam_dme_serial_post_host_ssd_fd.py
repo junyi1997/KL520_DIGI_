@@ -1,7 +1,8 @@
 """
 This is the example for dme ssd fd single test.
 """
-from python_wrapper import kdp_wrapper
+# from python_wrapper import kdp_wrapper
+import kdp_wrapper
 from common import constants
 from examples.fdssd.ssd_postprocess import postprocess_
 import cv2
