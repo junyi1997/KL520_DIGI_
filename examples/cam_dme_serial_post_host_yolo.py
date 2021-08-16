@@ -71,7 +71,7 @@ def user_test_single_dme(dev_idx, loop):
     keep_aspect_ratio = True
 
     # Setup video capture device.
-    capture = kdp_wrapper.setup_capture(1, image_source_w, image_source_h)
+    capture = kdp_wrapper.setup_capture(0, image_source_w, image_source_h)
     if capture is None:
         return -1
 
