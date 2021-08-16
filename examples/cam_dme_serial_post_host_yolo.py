@@ -6,8 +6,11 @@ from common import constants
 from examples.yolo.yolo_postprocess import yolo_postprocess_
 import cv2
 import sys
+import time
+count = 0
 
 def draw_result(dev_idx, det_res, captured_frames):
+    global count
     #for multiple detection
     for res in det_res:
         x1 = int(res[0])
@@ -17,14 +20,26 @@ def draw_result(dev_idx, det_res, captured_frames):
         class_num = res[5]
         score = res[4]
         # print(x1,x2,class_num,score)
-
+        # print(class_num)
+        class_path        = './common/coco_name_lists'
+        with open(class_path) as f:
+            class_names = f.readlines()
+        # print(class_names[0]) 
         if (class_num==0):
-            captured_frames[0] = cv2.rectangle(captured_frames[0], (x1, y1), (x2, y2), (0, 0, 255), 3)
+            pass
+            # captured_frames[0] = cv2.rectangle(captured_frames[0], (x1, y1), (x2, y2), (0, 0, 255), 3)
+            # captured_frames[0] = cv2.putText(captured_frames[0], 'person', (x1+30, y2-30), cv2.FONT_HERSHEY_TRIPLEX,  2   , (255, 0, 0), 1, cv2.LINE_AA)
             # print("score of person: ", score)
         else:
             captured_frames[0] = cv2.rectangle(captured_frames[0], (x1, y1), (x2, y2), (255, 0, 0), 3)
+            # captured_frames[0] = cv2.putText(影像, 文字, 座標, 字型, 大小, 顏色, 線條寬度, 線條種類)
+            captured_frames[0] = cv2.putText(captured_frames[0], str(class_names[class_num]), (x1, y2), cv2.FONT_HERSHEY_TRIPLEX,  2, (255, 0, 0), 1, cv2.LINE_AA)
             # print("score of others: ", score)
-
+    # print("FPS : {:.2f}".format(1/(time.time()-count)))
+    aaa = "FPS : {:.2f}".format(1/(time.time()-count))
+    captured_frames[0] = cv2.putText(captured_frames[0], str(aaa), (30, 30), cv2.FONT_HERSHEY_TRIPLEX,  1, (255, 0, 0), 1, cv2.LINE_AA)
+    # print(det_res)
+    count = time.time()
     cv2.imshow('detection', captured_frames[0])
     del captured_frames[0]
     key = cv2.waitKey(1)
@@ -56,7 +71,7 @@ def user_test_single_dme(dev_idx, loop):
     keep_aspect_ratio = True
 
     # Setup video capture device.
-    capture = kdp_wrapper.setup_capture(0, image_source_w, image_source_h)
+    capture = kdp_wrapper.setup_capture(1, image_source_w, image_source_h)
     if capture is None:
         return -1
 
@@ -65,7 +80,7 @@ def user_test_single_dme(dev_idx, loop):
 
         dets = yolo_postprocess_(raw_res, anchor_path, class_path, image_source_h, image_source_w, model_input_shape,
                                  score_thres, nms_thres, keep_aspect_ratio)
-
+           
         # print("dets: ", dets)
 
         draw_result(dev_idx, dets, frames)
