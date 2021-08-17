@@ -7,8 +7,12 @@ import cv2
 import time
 from common import constants
 from python_wrapper import kdp_wrapper
-
+import time
+count = 0
+aaa  = ""
+count_FPS = 0
 def handle_result(inf_res, r_size, frames):
+    global count,aaa,count_FPS
     """Handle the detected results returned from the model.
 
     Arguments:
@@ -28,7 +32,16 @@ def handle_result(inf_res, r_size, frames):
             x2 = int(box.x2)
             y2 = int(box.y2)
             frames[0] = cv2.rectangle(frames[0], (x1, y1), (x2, y2), (0, 0, 255), 3)
-
+        count_FPS += 1  
+        if time.time()-count > 1:
+            
+            aaa = "FPS : {:.2f}".format(count_FPS/(time.time()-count))
+            # print(det_res)
+            count = time.time()
+            count_FPS = 0 
+        
+           
+        frames[0] = cv2.putText(frames[0], str(aaa), (30, 30), cv2.FONT_HERSHEY_TRIPLEX,  1, (255, 0, 0), 1, cv2.LINE_AA)    
         cv2.imshow('detection', frames[0])
         del frames[0]
         key = cv2.waitKey(1)

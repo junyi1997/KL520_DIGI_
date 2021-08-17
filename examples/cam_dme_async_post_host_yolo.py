@@ -6,8 +6,10 @@ from common import constants
 from examples.yolo.yolo_postprocess import yolo_postprocess_
 import cv2
 import sys
-
+import time
+count = 0
 def handle_result(dev_idx, raw_res, captured_frames):
+    global count
     # the parameters for postprocess
     anchor_path       = './examples/yolo/models/anchors.txt'
     class_path        = './common/coco_name_lists'
@@ -29,14 +31,21 @@ def handle_result(dev_idx, raw_res, captured_frames):
         class_num = res[5]
         score = res[4]
         # print(x1,x2,class_num,score)
-
+        class_path        = './common/coco_name_lists'
+        with open(class_path) as f:
+            class_names = f.readlines()
         if (class_num==0):
             captured_frames[0] = cv2.rectangle(captured_frames[0], (x1, y1), (x2, y2), (0, 0, 255), 3)
+            captured_frames[0] = cv2.putText(captured_frames[0], 'person', (x1+30, y2-30), cv2.FONT_HERSHEY_TRIPLEX,  2   , (255, 0, 0), 1, cv2.LINE_AA)
             # print("score of person: ", score)
         else:
             captured_frames[0] = cv2.rectangle(captured_frames[0], (x1, y1), (x2, y2), (255, 0, 0), 3)
+            captured_frames[0] = cv2.putText(captured_frames[0], str(class_names[class_num]), (x1, y2), cv2.FONT_HERSHEY_TRIPLEX,  2, (255, 0, 0), 1, cv2.LINE_AA)
             # print("score of others: ", score)
-
+    aaa = "FPS : {:.2f}".format(1/(time.time()-count))
+    captured_frames[0] = cv2.putText(captured_frames[0], str(aaa), (30, 30), cv2.FONT_HERSHEY_TRIPLEX,  1, (255, 0, 0), 1, cv2.LINE_AA)
+    # print(det_res)
+    count = time.time()
     cv2.imshow('detection', captured_frames[0])
     del captured_frames[0]
     key = cv2.waitKey(1)

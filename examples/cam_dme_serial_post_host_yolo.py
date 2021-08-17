@@ -26,9 +26,9 @@ def draw_result(dev_idx, det_res, captured_frames):
             class_names = f.readlines()
         # print(class_names[0]) 
         if (class_num==0):
-            pass
-            # captured_frames[0] = cv2.rectangle(captured_frames[0], (x1, y1), (x2, y2), (0, 0, 255), 3)
-            # captured_frames[0] = cv2.putText(captured_frames[0], 'person', (x1+30, y2-30), cv2.FONT_HERSHEY_TRIPLEX,  2   , (255, 0, 0), 1, cv2.LINE_AA)
+            # pass
+            captured_frames[0] = cv2.rectangle(captured_frames[0], (x1, y1), (x2, y2), (0, 0, 255), 3)
+            captured_frames[0] = cv2.putText(captured_frames[0], 'person', (x1+30, y2-30), cv2.FONT_HERSHEY_TRIPLEX,  2   , (255, 0, 0), 1, cv2.LINE_AA)
             # print("score of person: ", score)
         else:
             captured_frames[0] = cv2.rectangle(captured_frames[0], (x1, y1), (x2, y2), (255, 0, 0), 3)
